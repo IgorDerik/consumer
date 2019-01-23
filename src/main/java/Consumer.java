@@ -1,11 +1,8 @@
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.TopicPartition;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
 
@@ -21,7 +18,7 @@ public class Consumer {
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<byte[], byte[]> consumer = new KafkaConsumer<>(consumerConfig);
 
-        consumer.subscribe(Collections.singletonList("test"));
+        consumer.subscribe(Collections.singletonList(args[0]));
 
         while (true) {
             ConsumerRecords<byte[], byte[]> records = consumer.poll(1000);
