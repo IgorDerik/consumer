@@ -48,11 +48,15 @@ public class Main {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)
                 );
 
+        stream.foreachRDD( System.out::println );
+
+        /*
         DStream<Tuple2<String, String>> dStream = stream
                 .mapToPair(record -> new Tuple2<>(record.key(), record.value()))
                 .dstream();
+        */
 
-        dStream.saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/spark/","txt");
+        //dStream.saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/spark/","txt");
 
         streamingContext.start();
         streamingContext.awaitTermination();
