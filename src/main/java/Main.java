@@ -48,15 +48,35 @@ public class Main {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)
                 );
 
+        stream.map(ConsumerRecord::value).print();
+
+//        stream.dstream().
+
+        /*
+        OffsetRange[] offsetRanges = {
+                // topic, partition, inclusive starting offset, exclusive ending offset
+                OffsetRange.create("some", 0, 0, 100),
+                //OffsetRange.create("test", 1, 0, 100)
+
+        };
+        */
+        /*
         stream.foreachRDD(rdd -> {
             OffsetRange[] offsetRanges = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
             rdd.foreachPartition(consumerRecords -> {
                 OffsetRange o = offsetRanges[TaskContext.get().partitionId()];
-                System.out.println(
-                        o.topic() + " " + o.partition() + " " + o.fromOffset() + " " + o.untilOffset());
+                System.out.println(o.topic() + " " + o.partition() + " " + o.fromOffset() + " " + o.untilOffset());
             });
         });
-
+        */
+        /*
+        JavaRDD<ConsumerRecord<String, String>> rdd = KafkaUtils.createRDD(
+                javaSparkContext,
+                kafkaParams,
+                offsetRanges,
+                LocationStrategies.PreferConsistent()
+        );
+        */
         /*
         DStream<Tuple2<String, String>> dStream = stream
                 .mapToPair(record -> new Tuple2<>(record.key(), record.value()))
