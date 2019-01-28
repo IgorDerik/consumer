@@ -48,7 +48,14 @@ public class Main {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)
                 );
 
-        stream.foreachRDD( System.out::println );
+        stream.foreachRDD(rdd -> {
+            OffsetRange[] offsetRanges = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
+            rdd.foreachPartition(consumerRecords -> {
+                OffsetRange o = offsetRanges[TaskContext.get().partitionId()];
+                System.out.println(
+                        o.topic() + " " + o.partition() + " " + o.fromOffset() + " " + o.untilOffset());
+            });
+        });
 
         /*
         DStream<Tuple2<String, String>> dStream = stream
