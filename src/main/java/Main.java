@@ -45,8 +45,8 @@ public class Main {
 
         dStream.saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/spark/","txt");
 
-        //streamingContext.start();
-        //streamingContext.awaitTermination();
+        streamingContext.start();
+        streamingContext.awaitTermination();
 
     }
 
