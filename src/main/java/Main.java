@@ -1,4 +1,8 @@
+import java.net.URI;
 import java.util.*;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.spark.SparkConf;
 import org.apache.spark.TaskContext;
 import org.apache.spark.api.java.*;
@@ -25,6 +29,11 @@ public class Main {
         kafkaParams.put("group.id", "use_a_separate_group_id_for_each_stream");
         kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
+
+        Configuration conf = new Configuration();
+        conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+        conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/spark/"), conf);
 
         JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
         Duration duration = new Duration(2000);
