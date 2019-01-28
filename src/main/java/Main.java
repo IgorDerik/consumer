@@ -14,7 +14,7 @@ import scala.Tuple2;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         SparkConf sparkConf = new SparkConf().setMaster("local[*]").setAppName("Streaming Homework");
 
@@ -44,6 +44,9 @@ public class Main {
                 .dstream();
 
         dStream.saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/spark/","txt");
+
+        //streamingContext.start();
+        //streamingContext.awaitTermination();
 
     }
 
