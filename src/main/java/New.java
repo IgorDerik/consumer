@@ -42,7 +42,7 @@ public class New {
                 LocationStrategies.PreferConsistent()
         );
 
-        rdd.map(ConsumerRecord::value).foreach(System.out::println);
+        rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
 
         /*
         Collection<String> topic = Collections.singletonList("some");
