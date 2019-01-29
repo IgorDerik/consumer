@@ -14,13 +14,12 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Next mod");
+        System.out.println("New mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
+        JavaSparkContext sparkContext = new JavaSparkContext(conf);
 
-        //JavaSparkContext sparkContext = new JavaSparkContext(conf);
-
-        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(3000));
+        //JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(3000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
         kafkaParams.put("bootstrap.servers", "sandbox-hdp.hortonworks.com:6667");
@@ -31,10 +30,10 @@ public class New {
         kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
 
-/*
+
         //WORKING!
         OffsetRange[] offsetRanges = {
-                OffsetRange.create("some", 0, 0, 100)
+                OffsetRange.create("some", 0, 300, 400)
         };
         JavaRDD<ConsumerRecord<String, String>> rdd = KafkaUtils.createRDD(
                 sparkContext,
@@ -43,10 +42,10 @@ public class New {
                 LocationStrategies.PreferConsistent()
         );
         rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
-*/
+
         //Map<TopicPartition, Long> fromOffsets = new HashMap<>();
         //fromOffsets.put(new TopicPartition("some",0),111L);
-
+/*
         Collection<String> topic = Collections.singletonList("some");
         JavaInputDStream<ConsumerRecord<String, String>> stream =
                 KafkaUtils.createDirectStream(
@@ -54,18 +53,17 @@ public class New {
                         LocationStrategies.PreferConsistent(),
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)//, fromOffsets)
                 );
+*/
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
 
-        stream.foreachRDD(rdd -> {
+  //      stream.foreachRDD(rdd -> {
             //rdd.map(ConsumerRecord::value).collect().forEach(System.out::println); //!
-
-            OffsetRange[] offsetRanges = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
-
-            System.out.print("RDD COUNT: ");
-            System.out.println( rdd.rdd().count() );
+    //        OffsetRange[] offsetRanges = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
+            //System.out.print("RDD COUNT: ");
+            //System.out.println( rdd.rdd().count() );
 
 //            System.out.println( "Cons record len: "+ rdd.rdd().collect().length );
-
+/*
             for (int i=0; i<offsetRanges.length; i++) {
                 System.out.println( "Count "+offsetRanges[i].count() );
                 System.out.println( "From "+offsetRanges[i].fromOffset() );
@@ -73,7 +71,7 @@ public class New {
                 System.out.println( "Topic "+offsetRanges[i].topic() );
                 System.out.println( "Until "+offsetRanges[i].untilOffset() );
             }
-
+*/
             /*
             rdd.foreachPartition(consumerRecords -> {
                 OffsetRange o = offsetRanges[TaskContext.get().partitionId()];
@@ -81,10 +79,10 @@ public class New {
                         o.topic() + " " + o.partition() + " " + o.fromOffset() + " " + o.untilOffset());
             });
             */
-        });
+//        });
 
-        streamingContext.start();
-        streamingContext.awaitTermination();
+//        streamingContext.start();
+  //      streamingContext.awaitTermination();
 
     }
 
