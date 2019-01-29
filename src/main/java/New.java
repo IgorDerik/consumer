@@ -14,7 +14,7 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New 3");
+        System.out.println("New 3 mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
 
@@ -45,7 +45,7 @@ public class New {
         rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
         */
 
-        Collection<String> topic = Collections.singletonList("some");
+        Collection<String> topic = Collections.singletonList(args[0]);
         JavaInputDStream<ConsumerRecord<String, String>> stream =
                 KafkaUtils.createDirectStream(
                         streamingContext,
