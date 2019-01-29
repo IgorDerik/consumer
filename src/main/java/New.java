@@ -14,13 +14,13 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New5 mod");
+        System.out.println("Next mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
 
         //JavaSparkContext sparkContext = new JavaSparkContext(conf);
 
-        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(2000));
+        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(3000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
         kafkaParams.put("bootstrap.servers", "sandbox-hdp.hortonworks.com:6667");
@@ -57,14 +57,25 @@ public class New {
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
 
         stream.foreachRDD(rdd -> {
-            rdd.map(ConsumerRecord::value).collect().forEach(System.out::println); //!
+            //rdd.map(ConsumerRecord::value).collect().forEach(System.out::println); //!
 
             OffsetRange[] offsetRanges = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
+
+            for (int i=0; i<offsetRanges.length; i++) {
+                System.out.println( "Count "+offsetRanges[i].count() );
+                System.out.println( "From "+offsetRanges[i].fromOffset() );
+                System.out.println( "Part "+offsetRanges[i].partition() );
+                System.out.println( "Topic "+offsetRanges[i].topic() );
+                System.out.println( "Until "+offsetRanges[i].untilOffset() );
+            }
+
+            /*
             rdd.foreachPartition(consumerRecords -> {
                 OffsetRange o = offsetRanges[TaskContext.get().partitionId()];
                 System.out.println(
                         o.topic() + " " + o.partition() + " " + o.fromOffset() + " " + o.untilOffset());
             });
+            */
         });
 
         streamingContext.start();
