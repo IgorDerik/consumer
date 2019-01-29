@@ -38,7 +38,7 @@ public class New {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)
                 );
 
-        stream.map(ConsumerRecord::value).print();
+        stream.map(ConsumerRecord::value).print(10);
 
         streamingContext.start();
         streamingContext.awaitTermination();
