@@ -28,7 +28,7 @@ public class New {
         kafkaParams.put("value.deserializer", StringDeserializer.class);
         kafkaParams.put("group.id", "stream-hw");
         kafkaParams.put("kafka.consumer.id", "kafka-consumer-01");
-        kafkaParams.put("auto.offset.reset", "earliest");
+        kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
 
 /*
@@ -60,6 +60,8 @@ public class New {
             //rdd.map(ConsumerRecord::value).collect().forEach(System.out::println); //!
 
             OffsetRange[] offsetRanges = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
+
+            System.out.println( "Cons record len: "+ rdd.rdd().collect().length );
 
             for (int i=0; i<offsetRanges.length; i++) {
                 System.out.println( "Count "+offsetRanges[i].count() );
