@@ -14,13 +14,13 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New mod");
+        System.out.println("New4 mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
 
-        //        JavaSparkContext sparkContext = new JavaSparkContext(conf);
+        JavaSparkContext sparkContext = new JavaSparkContext(conf);
 
-        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(1000));
+        //JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(1000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
         kafkaParams.put("bootstrap.servers", "sandbox-hdp.hortonworks.com:6667");
@@ -31,7 +31,7 @@ public class New {
         kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
 
-        /*
+
         //WORKING!
         OffsetRange[] offsetRanges = {
                 OffsetRange.create("some", 0, 0, 100)
@@ -43,10 +43,10 @@ public class New {
                 LocationStrategies.PreferConsistent()
         );
         rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
-        */
+
         //Map<TopicPartition, Long> fromOffsets = new HashMap<>();
         //fromOffsets.put(new TopicPartition("some",0),111L);
-
+/*
         Collection<String> topic = Collections.singletonList("some");
         JavaInputDStream<ConsumerRecord<String, String>> stream =
                 KafkaUtils.createDirectStream(
@@ -67,7 +67,7 @@ public class New {
 
         streamingContext.start();
         streamingContext.awaitTermination();
-
+*/
     }
 
 }
