@@ -14,12 +14,12 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New 1");
+        System.out.println("New 2");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
         JavaSparkContext sparkContext = new JavaSparkContext(conf);
 
-        //JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(1000));
+//        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(1000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
         kafkaParams.put("bootstrap.servers", "sandbox-hdp.hortonworks.com:6667");
@@ -29,6 +29,7 @@ public class New {
         kafkaParams.put("kafka.consumer.id", "kafka-consumer-01");
         kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
+
 
         OffsetRange[] offsetRanges = {
                 OffsetRange.create("some", 0, 0, 100)
@@ -41,7 +42,7 @@ public class New {
                 LocationStrategies.PreferConsistent()
         );
 
-        rdd.collect().forEach(System.out::println);
+        rdd.map(ConsumerRecord::value).foreach(System.out::println);
 
         /*
         Collection<String> topic = Collections.singletonList("some");
