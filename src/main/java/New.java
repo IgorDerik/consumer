@@ -14,13 +14,13 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New4 mod");
+        System.out.println("New5 mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
 
-        JavaSparkContext sparkContext = new JavaSparkContext(conf);
+        //JavaSparkContext sparkContext = new JavaSparkContext(conf);
 
-        //JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(1000));
+        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(2000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
         kafkaParams.put("bootstrap.servers", "sandbox-hdp.hortonworks.com:6667");
@@ -28,10 +28,10 @@ public class New {
         kafkaParams.put("value.deserializer", StringDeserializer.class);
         kafkaParams.put("group.id", "stream-hw");
         kafkaParams.put("kafka.consumer.id", "kafka-consumer-01");
-        kafkaParams.put("auto.offset.reset", "latest");
+        kafkaParams.put("auto.offset.reset", "earliest");
         kafkaParams.put("enable.auto.commit", false);
 
-
+/*
         //WORKING!
         OffsetRange[] offsetRanges = {
                 OffsetRange.create("some", 0, 0, 100)
@@ -43,10 +43,10 @@ public class New {
                 LocationStrategies.PreferConsistent()
         );
         rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
-
+*/
         //Map<TopicPartition, Long> fromOffsets = new HashMap<>();
         //fromOffsets.put(new TopicPartition("some",0),111L);
-/*
+
         Collection<String> topic = Collections.singletonList("some");
         JavaInputDStream<ConsumerRecord<String, String>> stream =
                 KafkaUtils.createDirectStream(
@@ -57,6 +57,8 @@ public class New {
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
 
         stream.foreachRDD(rdd -> {
+            rdd.map(ConsumerRecord::value).collect().forEach(System.out::println); //!
+
             OffsetRange[] offsetRanges = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
             rdd.foreachPartition(consumerRecords -> {
                 OffsetRange o = offsetRanges[TaskContext.get().partitionId()];
@@ -67,7 +69,7 @@ public class New {
 
         streamingContext.start();
         streamingContext.awaitTermination();
-*/
+
     }
 
 }
