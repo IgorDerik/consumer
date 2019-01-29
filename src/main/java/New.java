@@ -13,7 +13,7 @@ import scala.Tuple2;
 
 public class New {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         System.out.println("New!");
 
         SparkConf conf = new SparkConf().setAppName("Streaming App").setMaster("local[*]");
@@ -36,7 +36,10 @@ public class New {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)
                 );
 
-        stream.mapToPair(record -> new Tuple2<>(record.key(), record.value())).dstream().print();
+        stream.mapToPair(record -> new Tuple2<>(record.key(), record.value())).print();
+
+        streamingContext.start();
+        streamingContext.awaitTermination();
 
     }
 
