@@ -14,7 +14,7 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New 3 mod");
+        System.out.println("New mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
 
@@ -44,13 +44,15 @@ public class New {
         );
         rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
         */
+        Map<TopicPartition, Long> fromOffsets = new HashMap<>();
+        fromOffsets.put(new TopicPartition("some",0),111L);
 
-        Collection<String> topic = Collections.singletonList(args[0]);
+        Collection<String> topic = Collections.singletonList("some");
         JavaInputDStream<ConsumerRecord<String, String>> stream =
                 KafkaUtils.createDirectStream(
                         streamingContext,
                         LocationStrategies.PreferConsistent(),
-                        ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)
+                        ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams, fromOffsets)
                 );
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
 
