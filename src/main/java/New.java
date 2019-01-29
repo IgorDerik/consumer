@@ -24,8 +24,8 @@ public class New {
         kafkaParams.put("key.deserializer", StringDeserializer.class);
         kafkaParams.put("value.deserializer", StringDeserializer.class);
         kafkaParams.put("group.id", "1");
-        kafkaParams.put("auto.offset.reset", "latest");
-        kafkaParams.put("enable.auto.commit", false);
+        //kafkaParams.put("auto.offset.reset", "latest");
+        //kafkaParams.put("enable.auto.commit", false);
 
         Collection<String> topic = Collections.singletonList("some");
 
