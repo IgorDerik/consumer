@@ -17,8 +17,9 @@ public class New {
         System.out.println("New 1");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
+        JavaSparkContext sparkContext = new JavaSparkContext(conf);
 
-        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(1000));
+        //JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(1000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
         kafkaParams.put("bootstrap.servers", "sandbox-hdp.hortonworks.com:6667");
@@ -26,22 +27,35 @@ public class New {
         kafkaParams.put("value.deserializer", StringDeserializer.class);
         kafkaParams.put("group.id", "stream-hw");
         kafkaParams.put("kafka.consumer.id", "kafka-consumer-01");
-        kafkaParams.put("auto.offset.reset", "earliest");
+        kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
 
-        Collection<String> topic = Collections.singletonList("some");
+        OffsetRange[] offsetRanges = {
+                OffsetRange.create("some", 0, 0, 100)
+        };
 
+        JavaRDD<ConsumerRecord<String, String>> rdd = KafkaUtils.createRDD(
+                sparkContext,
+                kafkaParams,
+                offsetRanges,
+                LocationStrategies.PreferConsistent()
+        );
+
+        rdd.collect().forEach(System.out::println);
+
+        /*
+        Collection<String> topic = Collections.singletonList("some");
         JavaInputDStream<ConsumerRecord<String, String>> stream =
                 KafkaUtils.createDirectStream(
                         streamingContext,
                         LocationStrategies.PreferConsistent(),
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)
                 );
+        stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
+        */
 
-        stream.map(ConsumerRecord::value).print(10);
-
-        streamingContext.start();
-        streamingContext.awaitTermination();
+        //streamingContext.start();
+        //streamingContext.awaitTermination();
 
     }
 
