@@ -36,7 +36,7 @@ public class New {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)
                 );
 
-        stream.mapToPair(record -> new Tuple2<>(record.key(), record.value())).print();
+        stream.mapToPair(record -> new Tuple2<>(record.key(), record.value())).dstream().print();
 
         streamingContext.start();
         streamingContext.awaitTermination();
