@@ -20,6 +20,8 @@ public class Consumer {
 
         consumer.subscribe(Collections.singletonList(args[0]));
 
+
+
         while (true) {
             ConsumerRecords<byte[], byte[]> records = consumer.poll(1000);
             for (ConsumerRecord<byte[], byte[]> record : records) {
