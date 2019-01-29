@@ -61,6 +61,9 @@ public class New {
 
             OffsetRange[] offsetRanges = ((HasOffsetRanges) rdd.rdd()).offsetRanges();
 
+            System.out.print("RDD COUNT: ");
+            System.out.println( rdd.rdd().count() );
+
 //            System.out.println( "Cons record len: "+ rdd.rdd().collect().length );
 
             for (int i=0; i<offsetRanges.length; i++) {
