@@ -60,7 +60,7 @@ public class New {
                 .add("offset", DataTypes.LongType)
                 .add("value", DataTypes.StringType);
 
-        stream.dstream().saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/", "txt");
+        //stream.dstream().saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/", "txt");
 
         stream.foreachRDD(rdd -> {
             //rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
@@ -70,7 +70,7 @@ public class New {
                 JavaRDD<Row> offsetsAndValuesRowRDD = offsetsAndValuesPairRDD.map(tuple -> RowFactory.create(tuple._1(), tuple._2()));
                 Dataset<Row> offsetsAndValuesDF = sparkSession.createDataFrame(offsetsAndValuesRowRDD, structType);
                 offsetsAndValuesDF.show();
-                //offsetsAndValuesDF.write().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/");
+                offsetsAndValuesDF.write().csv("file"+offsetsAndValuesPairRDD.count());
             }
             else {
                 System.out.println("RDD IS EMPTY");
