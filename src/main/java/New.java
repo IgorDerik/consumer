@@ -65,8 +65,9 @@ public class New {
         Dataset<Row> rows = sparkSession.read().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0");
         rows.show(1000);
 
-        Path dir = Paths.get("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0");
-        Files.list(dir).forEach(System.out::println);
+        rows.orderBy("_c0").show(1);
+        //Path dir = Paths.get("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0");
+        //Files.list(dir).forEach(System.out::println);
 
         //stream.dstream().saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/", "txt");
 
