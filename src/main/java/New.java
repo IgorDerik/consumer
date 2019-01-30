@@ -27,6 +27,7 @@ public class New {
         System.out.println("New mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
+        conf.set("spark.testing.memory", "2147480000");
         JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(3000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
