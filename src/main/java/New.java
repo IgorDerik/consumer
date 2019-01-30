@@ -19,7 +19,7 @@ public class New {
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
         JavaSparkContext sparkContext = new JavaSparkContext(conf);
-        JavaStreamingContext streamingContext = new JavaStreamingContext(sparkContext, new Duration(3000));
+        JavaStreamingContext streamingContext = new JavaStreamingContext(sparkContext, new Duration(1000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
         kafkaParams.put("bootstrap.servers", "sandbox-hdp.hortonworks.com:6667");
@@ -48,7 +48,7 @@ public class New {
         //fromOffsets.put(new TopicPartition("some",0),111L);
         //KafkaUtils.createDirectStream()
 
-        Collection<String> topic = Collections.singletonList("some");
+        Collection<String> topic = Collections.singletonList(args[0]);
         JavaInputDStream<ConsumerRecord<String, String>> stream =
                 KafkaUtils.createDirectStream(
                         streamingContext,
