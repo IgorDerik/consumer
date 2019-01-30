@@ -38,13 +38,17 @@ public class New {
                         LocationStrategies.PreferConsistent(),
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams, fromOffsets)
                 );
-        stream.print();
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
-        /*
+
         stream.foreachRDD(rdd -> {
+            System.out.println("OFFSET");
+            rdd.map(ConsumerRecord::offset).collect().forEach(System.out::println);
+            System.out.println("VALUE");
             rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
+            System.out.println("KEY");
+            rdd.map(ConsumerRecord::key).collect().forEach(System.out::println);
         });
-        */
+
         streamingContext.start();
         streamingContext.awaitTermination();
 
