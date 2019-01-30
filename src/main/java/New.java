@@ -51,7 +51,7 @@ public class New {
         Configuration fsConf = new Configuration();
         fsConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
         fsConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
-        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0"), fsConf);
+//        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0"), fsConf);
 
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
