@@ -54,7 +54,7 @@ public class New {
         Configuration fsConf = new Configuration();
         fsConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
         fsConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
-        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/"), fsConf);
+        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream"), fsConf);
 
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
@@ -72,7 +72,7 @@ public class New {
                 JavaRDD<Row> offsetsAndValuesRowRDD = offsetsAndValuesPairRDD.map(tuple -> RowFactory.create(tuple._1(), tuple._2()));
                 Dataset<Row> offsetsAndValuesDF = sparkSession.createDataFrame(offsetsAndValuesRowRDD, structType);
                 offsetsAndValuesDF.show();
-                offsetsAndValuesDF.write().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/");
+                offsetsAndValuesDF.write().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream");
             }
             else {
                 System.out.println("RDD IS EMPTY");
