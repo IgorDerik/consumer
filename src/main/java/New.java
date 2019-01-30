@@ -14,7 +14,7 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New*** mod");
+        System.out.println("New mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
         JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(3000));
@@ -41,12 +41,7 @@ public class New {
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
 
         stream.foreachRDD(rdd -> {
-            System.out.println("OFFSET");
-            rdd.map(ConsumerRecord::offset).collect().forEach(System.out::println);
-            System.out.println("VALUE");
             rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
-            System.out.println("KEY");
-            rdd.map(ConsumerRecord::key).collect().forEach(System.out::println);
         });
 
         streamingContext.start();
