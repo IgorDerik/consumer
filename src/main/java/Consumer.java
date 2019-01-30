@@ -1,3 +1,4 @@
+import kafka.consumer.SimpleConsumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -17,6 +18,8 @@ public class Consumer {
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<byte[], byte[]> consumer = new KafkaConsumer<>(consumerConfig);
+
+//        SimpleConsumer simpleConsumer = new SimpleConsumer()
 
         consumer.subscribe(Collections.singletonList(args[0]));
 

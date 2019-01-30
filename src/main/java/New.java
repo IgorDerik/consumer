@@ -10,16 +10,16 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import scala.Tuple2;
+//import kafka.javaapi.consumer.SimpleConsumer;
 
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New mod");
+        System.out.println("New* mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
         JavaSparkContext sparkContext = new JavaSparkContext(conf);
-
-        //JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(3000));
+        JavaStreamingContext streamingContext = new JavaStreamingContext(sparkContext, new Duration(3000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
         kafkaParams.put("bootstrap.servers", "sandbox-hdp.hortonworks.com:6667");
@@ -27,11 +27,12 @@ public class New {
         kafkaParams.put("value.deserializer", StringDeserializer.class);
         kafkaParams.put("group.id", "stream-hw");
         kafkaParams.put("kafka.consumer.id", "kafka-consumer-01");
-        kafkaParams.put("auto.offset.reset", "latest");
-        kafkaParams.put("enable.auto.commit", false);
+//        kafkaParams.put("auto.offset.reset", "latest");
+  //      kafkaParams.put("enable.auto.commit", false);
 
 
         //WORKING!
+        /*
         OffsetRange[] offsetRanges = {
                 OffsetRange.create("some", 0, 300, 400)
         };
@@ -42,10 +43,11 @@ public class New {
                 LocationStrategies.PreferConsistent()
         );
         rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
-
+*/
         //Map<TopicPartition, Long> fromOffsets = new HashMap<>();
         //fromOffsets.put(new TopicPartition("some",0),111L);
-/*
+        //KafkaUtils.createDirectStream()
+
         Collection<String> topic = Collections.singletonList("some");
         JavaInputDStream<ConsumerRecord<String, String>> stream =
                 KafkaUtils.createDirectStream(
@@ -53,8 +55,10 @@ public class New {
                         LocationStrategies.PreferConsistent(),
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams)//, fromOffsets)
                 );
-*/
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
+        stream.foreachRDD(rdd -> {
+            rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
+        });
 
   //      stream.foreachRDD(rdd -> {
             //rdd.map(ConsumerRecord::value).collect().forEach(System.out::println); //!
@@ -81,8 +85,8 @@ public class New {
             */
 //        });
 
-//        streamingContext.start();
-  //      streamingContext.awaitTermination();
+        streamingContext.start();
+        streamingContext.awaitTermination();
 
     }
 
