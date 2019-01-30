@@ -50,10 +50,12 @@ public class New {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams, fromOffsets)
                 );
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
+  /*
         Configuration fsConf = new Configuration();
         conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
         conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
         FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/"), fsConf);
+*/
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
         StructType structType = new StructType()
