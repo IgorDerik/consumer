@@ -7,10 +7,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.TaskContext;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.*;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.Duration;
@@ -54,7 +51,7 @@ public class New {
         Configuration fsConf = new Configuration();
         fsConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
         fsConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
-        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream"), fsConf);
+        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0"), fsConf);
 
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
@@ -68,14 +65,15 @@ public class New {
             //rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
             if(!rdd.isEmpty()) {
                 System.out.println("WORKING...");
-                rdd.saveAsTextFile("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream");
-                /*
+                //rdd.saveAsTextFile("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream");
+
                 JavaPairRDD<Long, String> offsetsAndValuesPairRDD = rdd.mapToPair(record -> new Tuple2<>(record.offset(), record.value()));
                 JavaRDD<Row> offsetsAndValuesRowRDD = offsetsAndValuesPairRDD.map(tuple -> RowFactory.create(tuple._1(), tuple._2()));
                 Dataset<Row> offsetsAndValuesDF = sparkSession.createDataFrame(offsetsAndValuesRowRDD, structType);
                 offsetsAndValuesDF.show();
-                offsetsAndValuesDF.write().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream");
-                */
+                offsetsAndValuesDF.write().mode(SaveMode.Append)
+                        .csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0");
+
             }
             else {
                 System.out.println("RDD IS EMPTY");
