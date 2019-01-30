@@ -59,6 +59,9 @@ public class New {
                 .add("offset", DataTypes.LongType)
                 .add("value", DataTypes.StringType);
 
+        Dataset<Row> rows = sparkSession.read().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0");
+        rows.show(1000);
+
         //stream.dstream().saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/", "txt");
 
         stream.foreachRDD(rdd -> {
@@ -80,8 +83,8 @@ public class New {
             }
         });
 
-        streamingContext.start();
-        streamingContext.awaitTermination();
+        //streamingContext.start();
+        //streamingContext.awaitTermination();
 
     }
 
