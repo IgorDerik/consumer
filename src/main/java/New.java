@@ -62,7 +62,7 @@ public class New {
                 .add("offset", DataTypes.LongType)
                 .add("value", DataTypes.StringType);
 
-        Dataset<Row> rows = sparkSession.read().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0");
+        Dataset<Row> rows = sparkSession.read().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream111");
         rows.show(1000);
 
         System.out.println( rows.count() );
