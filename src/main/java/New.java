@@ -1,4 +1,7 @@
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import org.apache.hadoop.conf.Configuration;
@@ -51,7 +54,7 @@ public class New {
         Configuration fsConf = new Configuration();
         fsConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
         fsConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
-//        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0"), fsConf);
+        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0"), fsConf);
 
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
@@ -61,6 +64,9 @@ public class New {
 
         Dataset<Row> rows = sparkSession.read().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0");
         rows.show(1000);
+
+        Path dir = Paths.get("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream0");
+        Files.list(dir).forEach(System.out::println);
 
         //stream.dstream().saveAsTextFiles("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/", "txt");
 
