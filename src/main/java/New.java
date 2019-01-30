@@ -3,6 +3,12 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.TaskContext;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.*;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructType;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.*;
 import org.apache.spark.streaming.kafka010.*;
@@ -40,8 +46,18 @@ public class New {
                 );
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
 
+        SparkSession sparkSession = SparkSession.builder().getOrCreate();
+        StructType structType = new StructType()
+                .add("offset", DataTypes.LongType)
+                .add("value", DataTypes.StringType);
+
         stream.foreachRDD(rdd -> {
-            rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
+            //rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
+            System.out.println("PRINTING...");
+            JavaPairRDD<Long, String> offsetsAndValuesPairRDD = rdd.mapToPair( record -> new Tuple2<>( record.offset(), record.value() ) );
+            JavaRDD<Row> offsetsAndValuesRowRDD = offsetsAndValuesPairRDD.map(tuple -> RowFactory.create(tuple._1(), tuple._2()));
+            Dataset<Row> offsetsAndValuesDF = sparkSession.createDataFrame(offsetsAndValuesRowRDD, structType);
+            offsetsAndValuesDF.show();
         });
 
         streamingContext.start();
