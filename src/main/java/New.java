@@ -27,7 +27,7 @@ public class New {
         System.out.println("New mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
-        conf.set("spark.testing.memory", "2147480000");
+//        conf.set("spark.testing.memory", "2147480000");
         JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(3000));
 
         Map<String, Object> kafkaParams = new HashMap<>();
@@ -50,12 +50,12 @@ public class New {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams, fromOffsets)
                 );
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
-  /*
+
         Configuration fsConf = new Configuration();
-        conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-        conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+        fsConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+        fsConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
         FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/"), fsConf);
-*/
+
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
         StructType structType = new StructType()
@@ -72,7 +72,7 @@ public class New {
                 JavaRDD<Row> offsetsAndValuesRowRDD = offsetsAndValuesPairRDD.map(tuple -> RowFactory.create(tuple._1(), tuple._2()));
                 Dataset<Row> offsetsAndValuesDF = sparkSession.createDataFrame(offsetsAndValuesRowRDD, structType);
                 offsetsAndValuesDF.show();
-                offsetsAndValuesDF.write().csv("file"+offsetsAndValuesPairRDD.count());
+                offsetsAndValuesDF.write().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/");
             }
             else {
                 System.out.println("RDD IS EMPTY");
