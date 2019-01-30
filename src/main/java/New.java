@@ -1,4 +1,8 @@
+import java.net.URI;
 import java.util.*;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.spark.SparkConf;
 import org.apache.spark.TaskContext;
 import org.apache.spark.api.java.*;
@@ -45,6 +49,10 @@ public class New {
                         ConsumerStrategies.<String, String>Subscribe(topic, kafkaParams, fromOffsets)
                 );
         //stream.mapToPair(record -> new Tuple2<>(record.key(), record.value()));
+        Configuration fsConf = new Configuration();
+        conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+        conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+        FileSystem.get(URI.create("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/"), fsConf);
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
         StructType structType = new StructType()
@@ -53,11 +61,17 @@ public class New {
 
         stream.foreachRDD(rdd -> {
             //rdd.map(ConsumerRecord::value).collect().forEach(System.out::println);
-            System.out.println("PRINTING...");
-            JavaPairRDD<Long, String> offsetsAndValuesPairRDD = rdd.mapToPair( record -> new Tuple2<>( record.offset(), record.value() ) );
-            JavaRDD<Row> offsetsAndValuesRowRDD = offsetsAndValuesPairRDD.map(tuple -> RowFactory.create(tuple._1(), tuple._2()));
-            Dataset<Row> offsetsAndValuesDF = sparkSession.createDataFrame(offsetsAndValuesRowRDD, structType);
-            offsetsAndValuesDF.show();
+            if(!rdd.isEmpty()) {
+                System.out.println("WORKING...");
+                JavaPairRDD<Long, String> offsetsAndValuesPairRDD = rdd.mapToPair(record -> new Tuple2<>(record.offset(), record.value()));
+                JavaRDD<Row> offsetsAndValuesRowRDD = offsetsAndValuesPairRDD.map(tuple -> RowFactory.create(tuple._1(), tuple._2()));
+                Dataset<Row> offsetsAndValuesDF = sparkSession.createDataFrame(offsetsAndValuesRowRDD, structType);
+                offsetsAndValuesDF.show();
+                offsetsAndValuesDF.write().csv("hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/");
+            }
+            else {
+                System.out.println("RDD IS EMPTY");
+            }
         });
 
         streamingContext.start();
