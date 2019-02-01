@@ -78,7 +78,7 @@ public class StreamUtils {
             Dataset<Row> rows = sparkSession.read().csv(pathToCSV);
             offSet = rows.count();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
