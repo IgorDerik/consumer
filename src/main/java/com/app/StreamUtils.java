@@ -1,5 +1,7 @@
 package com.app;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -14,6 +16,8 @@ import org.apache.spark.streaming.kafka010.KafkaUtils;
 import org.apache.spark.streaming.kafka010.LocationStrategies;
 import scala.Tuple2;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,12 +70,19 @@ public class StreamUtils {
         long offSet = 0L;
 
         try {
+            Configuration fsConf = new Configuration();
+            fsConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+            fsConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+            FileSystem.get(URI.create(pathToCSV), fsConf);
+
             Dataset<Row> rows = sparkSession.read().csv(pathToCSV);
             offSet = rows.count();
-        } finally {
-            result.put(new TopicPartition(topic,partition), offSet);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        result.put(new TopicPartition(topic,partition), offSet);
         return result;
     }
 
