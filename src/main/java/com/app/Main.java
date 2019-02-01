@@ -37,12 +37,7 @@ public class Main {
         kafkaParams.put("kafka.consumer.id", "kafka-consumer-01");
         kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
-/*
-        Configuration fsConf = new Configuration();
-        fsConf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-        fsConf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
-        FileSystem.get(URI.create(pathToCSV), fsConf);
-*/
+
         Map<TopicPartition, Long> fromOffsets = StreamUtils.getFromOffsets(topic, sparkSession, pathToCSV);
         JavaInputDStream<ConsumerRecord<String, String>> stream = StreamUtils.getStream(streamingContext, topic, kafkaParams, fromOffsets);
         StreamUtils.writeRDDs(stream, sparkSession, pathToCSV);

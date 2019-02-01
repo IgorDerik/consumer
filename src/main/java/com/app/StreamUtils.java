@@ -79,7 +79,7 @@ public class StreamUtils {
             offSet = rows.count();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Probably path does not exist yet, offset will be set to 0");
         }
 
         result.put(new TopicPartition(topic,partition), offSet);
