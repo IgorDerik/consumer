@@ -93,8 +93,8 @@ public class New {
             }
         });
 
-        //streamingContext.start();
-        //streamingContext.awaitTermination();
+        streamingContext.start();
+        streamingContext.awaitTermination();
 
     }
 
