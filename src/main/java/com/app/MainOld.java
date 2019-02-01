@@ -1,3 +1,5 @@
+package com.app;
+
 import java.net.URI;
 import java.util.*;
 
@@ -16,7 +18,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import scala.Tuple2;
 
-public class Main {
+public class MainOld {
 
     public static void main(String[] args) throws Exception {
 

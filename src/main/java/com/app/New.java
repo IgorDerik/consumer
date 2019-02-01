@@ -1,3 +1,5 @@
+package com.app;
+
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +26,7 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("New mod");
+        System.out.println("com.app.New mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
 //        conf.set("spark.testing.memory", "2147480000");
@@ -58,6 +60,7 @@ public class New {
 
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
+
         StructType structType = new StructType()
                 .add("offset", DataTypes.LongType)
                 .add("value", DataTypes.StringType);

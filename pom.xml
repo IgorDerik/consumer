@@ -16,7 +16,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>New</mainClass>
+                            <mainClass>com.app.Test</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
