@@ -1,4 +1,4 @@
-package com.app;
+package com.tobedeleted;
 
 import java.net.URI;
 import java.nio.file.Files;
@@ -26,7 +26,7 @@ import scala.Tuple2;
 public class New {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("com.app.New mod");
+        System.out.println("com.tobedeleted.New mod");
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
 //        conf.set("spark.testing.memory", "2147480000");

@@ -54,7 +54,6 @@ public class StreamUtils {
 
                 offsetsAndValuesDF.write().mode(SaveMode.Append)
                         .csv(pathToCSV);
-
             }
             else {
                 System.out.println("RDD IS EMPTY");
