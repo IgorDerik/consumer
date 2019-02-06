@@ -49,10 +49,10 @@ public class StreamUtils {
                 JavaRDD<Row> offsetsAndValuesRowRDD = offsetsAndValuesPairRDD.map(tuple -> RowFactory.create(tuple._1(), tuple._2()));
                 Dataset<Row> offsetsAndValuesDF = sparkSession.createDataFrame(offsetsAndValuesRowRDD, structType);
 
-                offsetsAndValuesDF.show();
-
                 offsetsAndValuesDF.write().mode(SaveMode.Append)
                         .csv(pathToCSV);
+
+                System.out.println(offsetsAndValuesDF.count() + " records saved to file system");
             }
             else {
                 System.out.println("RDD IS EMPTY");
