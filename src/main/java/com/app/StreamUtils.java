@@ -16,7 +16,6 @@ import org.apache.spark.streaming.kafka010.KafkaUtils;
 import org.apache.spark.streaming.kafka010.LocationStrategies;
 import scala.Tuple2;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;

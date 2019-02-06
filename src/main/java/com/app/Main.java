@@ -1,7 +1,5 @@
 package com.app;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -11,8 +9,6 @@ import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
-import java.io.IOException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,12 +16,12 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 
-        System.out.println("preprod mod");
         String pathToCSV = "hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream1";
         String topic = "new1";
+        Duration duration = new Duration(3000);
 
         SparkConf conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]");
-        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, new Duration(3000));
+        JavaStreamingContext streamingContext = new JavaStreamingContext(conf, duration);
 
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
 
