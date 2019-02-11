@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StreamUtils {
+public class StreamUtilsOld {
 
     public static JavaInputDStream<ConsumerRecord<String, String>> getStream(JavaStreamingContext streamingContext, String topic, Map<String, Object> kafkaParams, Map<TopicPartition, Long> fromOffsets) {
 

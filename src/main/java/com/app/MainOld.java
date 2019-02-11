@@ -12,7 +12,7 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Main {
+public class MainOld {
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -34,9 +34,9 @@ public class Main {
         kafkaParams.put("auto.offset.reset", "latest");
         kafkaParams.put("enable.auto.commit", false);
 
-        Map<TopicPartition, Long> fromOffsets = StreamUtils.getFromOffsets(topic, sparkSession, pathToCSV);
-        JavaInputDStream<ConsumerRecord<String, String>> stream = StreamUtils.getStream(streamingContext, topic, kafkaParams, fromOffsets);
-        StreamUtils.writeRDDs(stream, sparkSession, pathToCSV);
+        Map<TopicPartition, Long> fromOffsets = StreamUtilsOld.getFromOffsets(topic, sparkSession, pathToCSV);
+        JavaInputDStream<ConsumerRecord<String, String>> stream = StreamUtilsOld.getStream(streamingContext, topic, kafkaParams, fromOffsets);
+        StreamUtilsOld.writeRDDs(stream, sparkSession, pathToCSV);
 
         streamingContext.start();
         streamingContext.awaitTermination();
