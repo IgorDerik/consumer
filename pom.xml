@@ -112,34 +112,11 @@
             <version>4.1.17.Final</version>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.holdenkarau/spark-testing-base -->
-        <dependency>
-            <groupId>com.holdenkarau</groupId>
-            <artifactId>spark-testing-base_2.11</artifactId>
-            <version>2.4.0_0.11.0</version>
-            <scope>test</scope>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.scalatest/scalatest -->
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.11</artifactId>
             <version>3.0.5</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/net.manub/scalatest-embedded-kafka -->
-        <dependency>
-            <groupId>net.manub</groupId>
-            <artifactId>scalatest-embedded-kafka_2.11</artifactId>
-            <version>2.0.0</version>
             <scope>test</scope>
         </dependency>
 
