@@ -18,6 +18,12 @@ import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 
 object StreamUtils {
 
+  /**
+    * Method reading input stream and write data as CSV files
+    * @param stream to read from
+    * @param sparkSession for creating data frames to write data as CSV
+    * @param pathToCSV path to the directory will contain saved data
+    */
   def writeRDDs(stream: InputDStream[ConsumerRecord[String, String]], sparkSession: SparkSession, pathToCSV: String): Unit = {
 
     val structType = new StructType()
@@ -39,6 +45,14 @@ object StreamUtils {
 
   }
 
+  /**
+    * Method for determining from which offset data should start reading
+    * @param topic is kafka topic
+    * @param partition of the target kafka topic
+    * @param sparkSession for receiving data frame by reading directory with data (if directory exists)
+    * @param pathToCSV path to the target directory should contain csv data
+    * @return Map contains topic and start offset information
+    */
   def getFromOffsets(topic: String, partition: Int, sparkSession: SparkSession, pathToCSV: String): Map[TopicPartition, Long] = {
     var offSet = 0L
     try {
@@ -55,8 +69,22 @@ object StreamUtils {
     Map(new TopicPartition(topic, partition) -> offSet)
   }
 
+  /**
+    * Method for determining from which offset data should start reading
+    * It doesn't contain partition parameter
+    * It will call previous method with default partition parameter (0)
+    * @return Map contains topic and start offset information
+    */
   def getFromOffsets(topic: String, sparkSession: SparkSession, pathToCSV: String): Map[TopicPartition, Long] = getFromOffsets(topic, 0, sparkSession, pathToCSV)
 
+  /**
+    * Method for getting stream from Kafka
+    * @param streamingContext streaming context
+    * @param topic is kafka topic to read from
+    * @param kafkaParams Map contains Kafka parameters
+    * @param fromOffsets offset from which data should start reading
+    * @return input direct stream of consumer records from Kafka
+    */
   def getStream(streamingContext: StreamingContext, topic: String, kafkaParams: Map[String, AnyRef], fromOffsets: Map[TopicPartition, Long]): InputDStream[ConsumerRecord[String, String]] = {
     val topicList = List(topic)
     KafkaUtils.createDirectStream[String, String](

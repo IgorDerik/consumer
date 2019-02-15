@@ -46,8 +46,8 @@ class StreamUtilsTest extends FlatSpec with BeforeAndAfter {
           .timeoutMs(3000)).listings().get()
     } catch {
       case e: Exception =>
-        println("Kafka not available: "+e.getMessage)
-        println("Please install it locally before testing, you can find all details in the README file.")
+        println("Kafka is not available: "+e.getMessage)
+        println("Please install and configure it locally before testing, you can find all details in the README file.")
         sys.exit
     }
 

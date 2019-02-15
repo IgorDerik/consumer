@@ -7,9 +7,9 @@ import org.apache.spark.streaming.{Duration, StreamingContext}
 
 object Main extends App {
 
-  val pathToCSV = "hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream1"
-  val topic = "new1"
-  val duration = Duration(3000)
+  val pathToCSV =  args(0) //e.g. "hdfs://sandbox-hdp.hortonworks.com:8020/user/hadoop/stream1"
+  val topic =  args(1) //e.g. "new1"
+  val duration = Duration(args(2).toLong) //e.g. 3000
 
   val conf = new SparkConf().setAppName("Streaming Homework").setMaster("local[*]")
   val streamingContext = new StreamingContext(conf, duration)
